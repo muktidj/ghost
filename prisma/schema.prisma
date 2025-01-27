@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  age       Int
+  password  String    @db.VarChar(255)
+  email     String   @db.VarChar(255)
+  pekerjaan String?   @db.VarChar(255)
+  createdAt DateTime  @default(now()) @db.Timestamp(0) // Otomatis saat data dibuat
+  updatedAt DateTime  @updatedAt @db.Timestamp(0)      // Otomatis saat data diperbarui
+}
+
+model new_wh_employee {
+  
+}
