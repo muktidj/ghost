@@ -26,7 +26,6 @@ app.use(express.json());
 //     })
 // })
 
-HewanQuRBAN(.)(.)69
 
 app.post("/users", async (req: Request, res: Response): Promise<void> => {
     try {
@@ -40,7 +39,7 @@ app.post("/users", async (req: Request, res: Response): Promise<void> => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const result = await prisma.users.create({
-            data: { name, age, password: hashedPassword, email, pekerjaan },
+            data: { name, age, password: hashedPassword, email, pekerjaan }
         });
 
         res.status(201).json({ data: result, message: "Successfully created user" });
@@ -48,6 +47,26 @@ app.post("/users", async (req: Request, res: Response): Promise<void> => {
         console.error(error);
         res.status(500).json({ message: "An error occurred while creating user" });
     }
+});
+
+app.post("/products", async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { product_name, duration, city, province, amount, isActive } = req.body;
+
+        if (!product_name || !duration || !amount || !isActive ) {
+            res.status(400).json({ message: "All fields are required" });
+            return;
+        }
+
+        const result = await prisma.products.create({
+            data: { product_name, duration, city, province, amount, isActive },
+        });
+        res.status(201).json({ data: result, message: "Successfully created product" });
+    }
+    catch (error) {
+        console.error(error);
+            res.status(500).json({ message: "An error occurred while creating product" });
+        }
 });
 
 // Route for user login
@@ -91,11 +110,18 @@ app.post("/login", async (req: Request, res: Response): Promise<void> => {
 app.get("/users", async (req, res) => {
     const result = await prisma.users.findMany()
     res.json ({
-            data: result,
-            message: "Successfully Get user"
+        data: result,
+        message: "Successfully Get user"
     })
 })
 
+app.get("/products", async (req, res) => {
+    const result = await prisma.products.findMany()
+    res.json ({
+        data: result,
+        message: "Successfully Get Data Products"
+    })
+})
 
 // Update
 app.patch("/users/:id", async (req, res) => {
@@ -110,7 +136,7 @@ app.patch("/users/:id", async (req, res) => {
             email: email,
             pekerjaan: pekerjaan
         },
-         where: {
+        where: {
             id: Number(id)
         }
     })
@@ -134,6 +160,34 @@ app.delete("/users/:id", async (req, res) => {
         message: `Successfully deleted user ${id}`,
     });
 })
+
+app.delete("/products/:id_product", async (req, res) => {
+    try {
+        const { id_product } = req.params;
+
+        // Pastikan id_product dikonversi ke angka jika id_product bertipe Int
+        const productId = parseInt(id_product, 10);
+        if (isNaN(productId)) {
+            res.status(400).json({ message: "Invalid product ID" });
+            return;
+        }
+
+        const result = await prisma.products.delete({
+            where: {
+                id_product: productId, // Sesuaikan dengan nama kolom di model Prisma
+            },
+        });
+
+        res.json({
+            message: `Successfully deleted product with ID ${productId}`,
+            data: result,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "An error occurred while deleting product" });
+    }
+});
+
 
 
 app.listen(PORT, () => {

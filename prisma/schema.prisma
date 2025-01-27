@@ -18,6 +18,19 @@ model users {
   updatedAt DateTime  @updatedAt @db.Timestamp(0)      // Otomatis saat data diperbarui
 }
 
-model new_wh_employee {
-  
+model products {
+  id_product        Int       @id @default(autoincrement())
+  product_name      String    @db.VarChar(255)
+  duration          Int
+  city              String?
+  province          String?
+  amount            Int
+  isActive          Enum
+  createdAt         DateTime @default(now()) @db.Timestamp(0)
+  updatedAt         DateTime @updatedAt @db.Timestamp(0)
+}
+
+enum Enum {
+  Active
+  Inactive
 }
