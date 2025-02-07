@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '3mb' }));
 app.use(cors(corsOpts));
 
-app.use('/x-com', routes);
+app.use(routes);
 app.use(notFound);
 app.use(handleError);
 
