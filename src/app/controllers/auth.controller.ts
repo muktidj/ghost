@@ -35,7 +35,7 @@ export class AuthControllerV1 {
             // Generate JWT token
             const token = jwt.sign(
                 { id: user.id, email: user.email },
-                process.env.JWT_SECRET || 'your-secret-key', // Gunakan environment variable untuk secret key
+                process.env.JWT_SECRET_KEY || 'your-secret-key', // Gunakan environment variable untuk secret key
                 { expiresIn: '1h' } // Token akan kadaluarsa dalam 1 jam
             );
 

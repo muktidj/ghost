@@ -10,20 +10,36 @@ userRouteV1.get(
         await UserControllerV1.getAll(req as RequestWithAuth, res, next);
     }
 );
+
+userRouteV1.get(
+    '/export-excel',
+    async (req: Request, res: Response, next: NextFunction) => {
+        await UserControllerV1.exportToExcel(req as RequestWithAuth, res, next);
+    }
+);
+
+userRouteV1.get(
+    '/:id',
+    async (req: Request, res: Response, next: NextFunction) => {
+        await UserControllerV1.getFindOne(req as RequestWithAuth, res, next);
+    }
+);
+
+
 userRouteV1.post(
-    '/',
+    '/create',
     async (req: Request, res: Response, next: NextFunction) => {
         await UserControllerV1.create(req as RequestWithAuth, res, next);
     }
 );
 userRouteV1.put(
-    '/:id',
+    '/update/:id',
     async (req: Request, res: Response, next: NextFunction) => {
         await UserControllerV1.update(req as RequestWithAuth, res, next);
     }
 );
 userRouteV1.delete(
-    '/:id',
+    '/delete/:id',
     async (req: Request, res: Response, next: NextFunction) => {
         await UserControllerV1.delete(req as RequestWithAuth, res, next);
     }

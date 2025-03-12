@@ -1,11 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { RequestWithAuth } from '../../types/express';
+import { Enum } from '@prisma/client';
+
+
+const prisma = new PrismaClient();
 
 export class ProductControllerV1 {
     static async create(req: RequestWithAuth, res: Response, next: NextFunction) {
         try {
-            const prisma = new PrismaClient();
+
             const { product_name, duration, city, province, amount, isActive } =
                 req.body;
 
@@ -26,7 +30,6 @@ export class ProductControllerV1 {
 
     static async getAll(req: RequestWithAuth, res: Response, next: NextFunction) {
         try {
-            const prisma = new PrismaClient();
             const result = await prisma.products.findMany();
             res.json({
                 data: result,
@@ -39,34 +42,46 @@ export class ProductControllerV1 {
 
     static async update(req: RequestWithAuth, res: Response, next: NextFunction) {
         try {
-            const prisma = new PrismaClient();
             const { id } = req.params;
-            const { name, age, password, email, pekerjaan } = req.body;
+            const { product_name, duration, city, province, amount, isActive } = req.body;
 
-            const result = await prisma.users.update({
+            // Konversi ID ke number
+            const productId = Number(id);
+            if (isNaN(productId)) {
+                return res.status(400).json({ message: 'Invalid product ID' });
+            }
+
+            // Pastikan isActive adalah enum yang valid
+            if (!['Active', 'Inactive'].includes(isActive)) {
+                return res.status(400).json({ message: 'Invalid value for isActive. Must be "Active" or "Inactive".' });
+            }
+
+            // Update data
+            const result = await prisma.products.update({
+                where: { id_product: productId },
                 data: {
-                    name: name,
-                    age: age,
-                    password: password,
-                    email: email,
-                    pekerjaan: pekerjaan,
-                },
-                where: {
-                    id: Number(id),
+                    product_name,
+                    duration,
+                    city,
+                    province,
+                    amount,
+                    isActive: isActive as Enum, // Konversi ke enum Prisma
                 },
             });
+
             res.json({
                 data: result,
-                message: 'Successfully update user',
+                message: 'Successfully updated product',
             });
         } catch (error) {
             next(error);
         }
     }
 
+
     static async delete(req: RequestWithAuth, res: Response, next: NextFunction) {
         try {
-            const prisma = new PrismaClient();
+
             const { id_product } = req.params;
 
             // Pastikan id_product dikonversi ke angka jika id_product bertipe Int

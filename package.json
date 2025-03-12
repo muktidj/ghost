@@ -26,11 +26,10 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dayjs": "^1.11.13",
+    "exceljs": "^4.4.0",
     "jsonwebtoken": "^9.0.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "yup": "^1.6.1"
   }
 }
-
-
