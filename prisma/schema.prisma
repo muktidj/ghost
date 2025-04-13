@@ -30,6 +30,18 @@ model products {
   updatedAt         DateTime @updatedAt @db.Timestamp(0)
 }
 
+
+  model product_reviews {
+    id Int       @id @default(autoincrement())
+    name         String    @db.VarChar(255)
+    photos       String    @db.VarChar(255)
+    star         Int
+    comment      String @db.Text
+    createdAt DateTime  @default(now()) @db.Timestamp(0) // Otomatis saat data dibuat
+    updatedAt DateTime  @updatedAt @db.Timestamp(0)      // Otomatis saat data diperbarui
+  }
+
+
 enum Enum {
   Active
   Inactive
